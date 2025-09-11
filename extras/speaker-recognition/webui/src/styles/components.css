@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* Card/Container styles */
+  .card {
+    @apply bg-white border border-gray-200 rounded-lg;
+  }
+  
+  .card-secondary {
+    @apply bg-gray-50 rounded-lg;
+  }
+  
+  /* Text styles */
+  .text-primary {
+    @apply text-gray-900;
+  }
+  
+  .text-secondary {
+    @apply text-gray-600;
+  }
+  
+  .text-muted {
+    @apply text-gray-500;
+  }
+  
+  /* Heading styles */
+  .heading-lg {
+    @apply text-2xl font-bold text-gray-900;
+  }
+  
+  .heading-md {
+    @apply text-xl font-semibold text-gray-900;
+  }
+  
+  .heading-sm {
+    @apply text-lg font-medium text-gray-900;
+  }
+  
+  /* Form elements */
+  .input-label {
+    @apply block text-sm font-medium text-gray-700;
+  }
+  
+  /* Interactive elements */
+  .hover-bg {
+    @apply hover:bg-gray-100;
+  }
+  
+  /* Table headers */
+  .table-header {
+    @apply text-xs font-medium text-gray-500 uppercase tracking-wider;
+  }
+}

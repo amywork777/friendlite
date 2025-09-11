@@ -1,0 +1,66 @@
+[project]
+name = "advanced-omi-backend"
+version = "0.1.0"
+description = "AI-powered wearable ecosystem for audio capture, transcription, and memory extraction"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "easy-audio-interfaces>=0.7.1", # we need to add local-audio for scripts/local-audio.py | If we don't need that, we can remove this, and then remove portaudio19-dev from Dockerfile
+    "fastapi>=0.115.12",
+    "mem0ai", # Using main branch with PR #3250 AsyncMemory fix
+    "langchain_neo4j",
+    "motor>=3.7.1",
+    "ollama>=0.4.8",
+    "friend-lite-sdk",
+    "python-dotenv>=1.1.0",
+    "uvicorn>=0.34.2",
+    "wyoming>=1.6.1",
+    "aiohttp>=3.8.0",
+    "fastapi-users[beanie]>=14.0.1",
+    "PyYAML>=6.0.1",
+    "langfuse>=3.3.0",
+    "spacy>=3.8.2",
+    "en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl",
+]
+
+[project.optional-dependencies]
+deepgram = [
+    "deepgram-sdk>=4.0.0",
+]
+
+local-audio = [
+    "easy-audio-interfaces[local-audio]>=0.7.1",
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 100
+
+[tool.uv.sources]
+mem0ai = { git = "https://github.com/AnkushMalaker/mem0.git", rev = "async-client-unbound-var-fix" }
+
+[tool.pytest.ini_options]
+markers = [
+    "integration: marks tests as integration tests",
+]
+
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+    "isort>=6.0.1",
+    "pre-commit>=4.2.0",
+    "pre-commit-uv>=4.1.4",
+]
+test = [
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.0.0",
+]

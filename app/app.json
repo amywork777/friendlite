@@ -49,7 +49,9 @@
           "enableNotifications": true,
           "enableBackgroundAudio": true,
           "enableDeviceDetection": true,
-          "iosBackgroundModes": { "useProcessing": true },
+          "iosBackgroundModes": {
+            "useProcessing": true
+          },
           "iosConfig": {
             "microphoneUsageDescription": "We use the mic for live audio streaming"
           }
@@ -95,8 +97,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "05d8598e-6fe7-4373-81e4-1654f3d8e181"
+        "projectId": "4f8293da-bbe9-4f89-8979-2e594c9eaa34"
       }
-    }
+    },
+    "owner": "amzyst"
   }
 }

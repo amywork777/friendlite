@@ -29,6 +29,7 @@ import DeviceDetails from './components/DeviceDetails';
 import AuthSection from './components/AuthSection';
 import BackendStatus from './components/BackendStatus';
 import PhoneAudioButton from './components/PhoneAudioButton';
+import TranscriptionsSection from './components/TranscriptionsSection';
 
 export default function App() {
   // Initialize OmiConnection
@@ -52,6 +53,9 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [currentUserEmail, setCurrentUserEmail] = useState<string | null>(null);
   const [jwtToken, setJwtToken] = useState<string | null>(null);
+  
+  // Tab state for switching between recording and transcriptions
+  const [activeTab, setActiveTab] = useState<'recording' | 'transcriptions'>('recording');
   
   // Bluetooth Management Hook
   const {
@@ -517,11 +521,40 @@ export default function App() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
       >
-        <ScrollView 
-          contentContainerStyle={styles.content}
-          keyboardShouldPersistTaps="handled"
-        >
+        {/* Header with title and tab navigation */}
+        <View style={styles.header}>
           <Text style={styles.title}>Friend Lite</Text>
+          <View style={styles.tabContainer}>
+            <TouchableOpacity
+              style={[styles.tabButton, activeTab === 'recording' && styles.activeTab]}
+              onPress={() => setActiveTab('recording')}
+            >
+              <Text style={[styles.tabText, activeTab === 'recording' && styles.activeTabText]}>
+                Recording
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.tabButton, activeTab === 'transcriptions' && styles.activeTab]}
+              onPress={() => setActiveTab('transcriptions')}
+            >
+              <Text style={[styles.tabText, activeTab === 'transcriptions' && styles.activeTabText]}>
+                Transcriptions
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Content based on active tab */}
+        {activeTab === 'transcriptions' ? (
+          <TranscriptionsSection 
+            jwtToken={jwtToken}
+            backendUrl={webSocketUrl}
+          />
+        ) : (
+          <ScrollView 
+            contentContainerStyle={styles.content}
+            keyboardShouldPersistTaps="handled"
+          >
 
           {/* Backend Connection - moved to top */}
           <BackendStatus
@@ -697,7 +730,8 @@ export default function App() {
               audioListenerRetryAttempts={audioListenerRetryAttempts}
             />
           )}
-        </ScrollView>
+          </ScrollView>
+        )}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -708,17 +742,52 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
+  header: {
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    paddingTop: Platform.OS === 'android' ? 30 : 10,
+    paddingBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
   content: {
     padding: 20,
-    paddingTop: Platform.OS === 'android' ? 30 : 10,
+    paddingTop: 20,
     paddingBottom: 50,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 15,
     color: '#333',
     textAlign: 'center',
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#f0f0f0',
+    borderRadius: 8,
+    padding: 4,
+  },
+  tabButton: {
+    flex: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+    alignItems: 'center',
+  },
+  activeTab: {
+    backgroundColor: '#007AFF',
+  },
+  tabText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#666',
+  },
+  activeTabText: {
+    color: 'white',
   },
   section: {
     marginBottom: 25,

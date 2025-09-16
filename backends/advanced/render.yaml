@@ -1,0 +1,66 @@
+services:
+  - type: web
+    name: friendlite-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile.render
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      # Authentication
+      - key: AUTH_SECRET_KEY
+        value: your-super-secret-jwt-key-change-this-to-something-random-and-long-123456
+      - key: ADMIN_PASSWORD
+        value: admin123
+      - key: ADMIN_EMAIL
+        value: admin@example.com
+      
+      # LLM Configuration
+      - key: LLM_PROVIDER
+        value: openai
+      - key: OPENAI_API_KEY
+        value: your-openai-api-key-here
+      - key: OPENAI_BASE_URL
+        value: https://api.openai.com/v1
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      
+      # Speech-to-Text
+      - key: DEEPGRAM_API_KEY
+        value: your-deepgram-api-key-here
+      - key: TRANSCRIPTION_PROVIDER
+        value: deepgram
+      
+      # Memory Provider
+      - key: MEMORY_PROVIDER
+        value: friend_lite
+      
+      # Network Configuration
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: 10000
+      - key: BACKEND_PUBLIC_PORT
+        value: 10000
+      - key: WEBUI_PORT
+        value: 5173
+      
+      # CORS Origins (will be updated after deployment)
+      - key: CORS_ORIGINS
+        value: https://friendlite-backend.onrender.com,http://localhost:5173,http://localhost:3000
+      
+      # Database URLs (will be set by connecting external databases)
+      - key: MONGODB_URI
+        fromDatabase:
+          name: mongodb
+          property: connectionString
+      - key: QDRANT_BASE_URL
+        value: https://your-qdrant-instance.qdrant.io
+      
+      # Disable telemetry
+      - key: LANGFUSE_ENABLE_TELEMETRY
+        value: "False"
+
+databases:
+  - name: mongodb
+    databaseName: friendlite
+    user: friendlite
